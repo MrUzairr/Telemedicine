@@ -16,25 +16,20 @@ A robust telemedicine platform designed to bridge the gap between patients and h
 - **Containerization:** Docker for seamless deployment and scaling
 - **AI Integration:** Machine Learning models for disease prediction and recommendations
 # Installation
-1. Clone the repository:
-
+1. **Clone the repository:**
 bash
 Copy code
 git clone https://github.com/your-username/telemedicine-app.git
-2. Navigate into the project directory:
-
+2. **Navigate into the project directory:**
 bash
 Copy code
 cd telemedicine-app
-3. Install dependencies:
-
+3. **Install dependencies:**
 bash
 Copy code
 npm install
-4. Set up environment variables: Create a .env file in the root directory with your configuration details (e.g., database URI, API keys).
-
-5. Start the application:
-
+4. **Set up environment variables:** Create a .env file in the root directory with your configuration details (e.g., database URI, API keys).
+5. **Start the application:**
 bash
 Copy code
 npm start
@@ -44,7 +39,6 @@ npm start
 3. Health Records & Insights: Patients can view consultation history, access medical records, and get AI-driven insights.
 # Contributing
 Contributions are welcome! Please follow these steps:
-
 1. Fork the repository.
 2. Create a new branch (git checkout -b feature/YourFeature).
 3. Commit your changes (git commit -m 'Add new feature').
