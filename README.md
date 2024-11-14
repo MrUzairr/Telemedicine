@@ -2,18 +2,19 @@
 A robust telemedicine platform designed to bridge the gap between patients and healthcare providers through virtual consultations. This application enables users to access healthcare remotely, making medical consultations convenient and efficient. Built with a focus on accessibility, security, and personalized care, the app offers a seamless experience for both patients and doctors.
 
 # Features
-**Video & Chat Consultations:** Patients can consult with doctors via real-time video or chat, ensuring quick and easy access to medical advice.
-**Appointment Scheduling:** Patients can book appointments with available healthcare providers based on their schedules, and receive automated reminders.
-**Patient & Doctor Profiles:** Detailed profiles allow doctors to view patient medical history, and patients to find the right doctor for their needs.
-**Electronic Health Records (EHR):** Secure storage of patient data, including consultation history, medical records, and prescriptions, accessible only by authorized users.
-**AI-powered Disease Prediction:** An intelligent module that analyzes patient data to predict potential health issues and suggests relevant doctors, offering personalized healthcare insights.
-**Secure Messaging:** End-to-end encrypted messaging ensures privacy and confidentiality between patients and healthcare providers.
+- **Video & Chat Consultations:** Patients can consult with doctors via real-time video or chat, ensuring quick and easy access to medical advice.
+- **Appointment Scheduling:** Patients can book appointments with available healthcare providers based on their schedules, and receive automated reminders.
+- **Patient & Doctor Profiles:** Detailed profiles allow doctors to view patient medical history, and patients to find the right doctor for their needs.
+- **Electronic Health Records (EHR):** Secure storage of patient data, including consultation history, medical records, and prescriptions, accessible only by authorized users.
+- **AI-powered Disease Prediction:** An intelligent module that analyzes patient data to predict potential health issues and suggests relevant doctors, offering personalized healthcare insights.
+- **Secure Messaging:** End-to-end encrypted messaging ensures privacy and confidentiality between patients and healthcare providers.
+
 # Tech Stack
-**Frontend:** React for a responsive and interactive user interface
-**Backend:** Node.js and Express for a scalable and fast server
-**Database:** MongoDB for secure storage of user data and medical records
-**Containerization:** Docker for seamless deployment and scaling
-**AI Integration:** Machine Learning models for disease prediction and recommendations
+- **Frontend:** React for a responsive and interactive user interface
+- **Backend:** Node.js and Express for a scalable and fast server
+- **Database:** MongoDB for secure storage of user data and medical records
+- **Containerization:** Docker for seamless deployment and scaling
+- **AI Integration:** Machine Learning models for disease prediction and recommendations
 # Installation
 1. Clone the repository:
 
