@@ -1,0 +1,119 @@
+/* Center the form on the page */
+.form-class {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Common gap between rows */
+.gap-class {
+  gap: 1rem;
+}
+
+/* Buttons customization */
+.button-class {
+  width: 48%;
+}
+
+/* Input field styles */
+.input-class {
+  width: 100%;
+  padding: 0.75rem;
+  margin-left: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Label styles */
+.label-class {
+  font-weight: 500;
+  text-align:justify;
+}
+
+/* Form switch alignment */
+.form-check {
+  display: flex;
+  align-items: center;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+/* Label width for alignment */
+.w-25 {
+  width: 25%;
+}
+
+/* Input width for balanced layout */
+.w-50 {
+  width: 50%;
+}
+
+/* Add gap between input fields in flex row */
+.d-flex.gap-3 {
+  gap: 1rem;
+}
+
+
+
+/* .form-class {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  
+  .gap-class {
+    gap: 1rem;
+  }
+  
+  .button-class {
+    width: 48%;
+  }
+  
+ .input-class{
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .label-class {
+    font-weight: 500;
+  }
+  
+  .form-check {
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-check-input {
+    margin-right: 10px;
+  }
+  
+  .d-flex.flex-row {
+    align-items: center;
+  }
+  
+  .w-25 {
+    width: 25%;  
+  }
+  
+  .w-50 {
+    width: 50%;  
+  }
+
+  .d-flex.gap-3 {
+    gap: 1rem;
+  }
+   */
