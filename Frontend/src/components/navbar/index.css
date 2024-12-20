@@ -44,6 +44,9 @@
     .nav-logo-div{
       margin-left: 80px;    
     }
+    .nav-logo-div.authenticated{
+      margin-right: 80px !important;
+    }
   }
 @media(max-width: 720px) {
   .nav-logo-div{
@@ -53,19 +56,26 @@
   .nav-offcanvas{
     margin-left: 30px;
   }
+  .nav-logo-div.authenticated{
+    margin-right: 60px !important;
+  }
 }
 @media(max-width: 585px){
   .nav-logo-div{
     margin-left: 60px;
     width: 200px;
-
+  }
+  .nav-logo-div.authenticated{
+    margin-right: 40px !important;
   }
 }
 @media(max-width: 585px){
   .nav-logo-div{
     margin-left: 50px;
     width: 200px;
-
+  }
+  .nav-logo-div.authenticated{
+    margin-right: 30px !important;
   }
   .nav-sign1{
   margin-right: 20px;
@@ -79,12 +89,17 @@
   .nav-logo-div{
     margin-left: 30px;
     width: 240px !important;
-
+  }
+  .nav-logo-div.authenticated{
+    margin-right: 20px !important;
   }
 }
 @media(max-width: 536px){
   .nav-logo-div{
     margin-left: 0px;
+  }
+  .nav-logo-div.authenticated{
+    margin-right: 10px !important;
   }
   .nav-logo {
     margin-left: 50px;
@@ -94,6 +109,9 @@
 @media(max-width: 506px){
   .nav-logo {
     margin-left: 50px;
+  }
+  .nav-logo-div.authenticated{
+    margin-right: 0px !important;
   }
 }
 
@@ -204,6 +222,9 @@
     transition: all 0.5s;
     transform: rotate(180deg); /* Rotate the cross icon if you want an animation */
   }
+  .nav-logo-div.authenticated{
+    margin-right: 60px;
+  }
 }
 /* Style for the nested dropdown */
 .dropdown-submenu {
@@ -248,6 +269,10 @@
   .nav-sign1:hover{
     background-color: #b6cfe3a4;
   }
+  .ai-icon{
+    width: 25px !important;
+    height: 25px !important;
+  }
   .nav-logo {
     background: linear-gradient(45deg, #5fefff, #7b7dfe,#c37bfe,#7116df); /* Customize colors and angle */
     -webkit-background-clip: text; /* Applies the gradient to the text */
@@ -255,7 +280,11 @@
     font-weight: bold; /* Optional: make the logo text bold */
     font-size: 1.5em; /* Optional: adjust the logo size */
   }
-
+  .nav-sign3{
+    display: flex;
+    flex-direction: row;
+    width: 100% !important;
+  }
   .nav-register{
     border-radius: 20px;
     background-color: var(--primary-color);
@@ -265,6 +294,64 @@
     padding: 6px 20px;
     transition: all 0.5s;
   }
+  /* Style for the logout button */
+.nav-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  border-radius: 25px;
+  padding: 8px 15px;
+  transition: all 0.5s;
+}
+.nav-logout:hover{
+  background-color: #b6cfe3a4;
+}
+
+/* Initially, both icon and text are visible */
+.logout-icon {
+  margin-right: 5px;
+  font-size: 20px !important;
+}
+
+/* For mobile view (below 550px), hide the text and only show the icon */
+@media (max-width: 550px) {
+  .logout-text {
+    display: none;
+  }
+  .logout-icon {
+    margin-right: -30px;
+    
+  }
+}
+
+/* For larger screens, ensure the text is visible */
+@media (min-width: 551px) {
+  .logout-text {
+    display: inline;
+  }
+}
+
+  /* .nav-logout{
+    border-radius: 20px;
+    background-color: var(--primary-color);
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    padding: 6px 20px;
+    transition: all 0.5s;
+  }
+  .nav-logout:hover{
+    background-color: var(--text-color);
+  } */
   .nav-register:hover{
     background-color: var(--text-color);
+  }
+
+  .nav-logo-div.authenticated{
+    margin-right: 0px;
+  }
+  .nav-logo-div.unauthenticated{
+    margin-right: 0px;
   }

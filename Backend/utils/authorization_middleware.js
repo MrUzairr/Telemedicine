@@ -1,13 +1,14 @@
 const jwt = require("jsonwebtoken"); // Middleware function to validate JWT tokens
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 function validateToken(req, res, next) {
   const token = req.headers.authorization;
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    return res.status(401).json({ message: "Unauthorized/No token provided" });
   }
   const splitToken = token.split(" ")[1];
-  jwt.verify(splitToken, "12345", (err, decoded) => {
+  jwt.verify(splitToken, ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(403).json({ message: "Failed to authenticate token" });
+      return res.status(403).json({ message: "Token expired or invalid/Failed to authenticate token" });
     }
     // If the token is valid, save the decoded information for later use
     req.user = decoded;

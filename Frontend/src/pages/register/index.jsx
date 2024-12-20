@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import "./index.css";
-import GoogleLogin from '../../components/googleLogin/index';
+import GoogleRegister from '../../components/googleRegister/index';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { FaChevronLeft } from "react-icons/fa";
+import { useFormik } from 'formik'; 
+import {signup} from '../../api';
+import { setUser } from '../../store/userSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [error, setError] = useState("");
   const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -17,14 +26,12 @@ const Register = () => {
   
   const GoogleWrapper = ()=>(
 		<GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-			<GoogleLogin></GoogleLogin>
+			<GoogleRegister></GoogleRegister>
 		</GoogleOAuthProvider>
 	)
   // Update handleRegister to prevent default form submission
-  const handleRegister = async (e) => {
-    e.preventDefault(); // Prevent the default form submission
-
-    const user = {
+  const handleSignup = async () => {
+    const data = {
       firstname,
       lastname,
       email,
@@ -33,23 +40,71 @@ const Register = () => {
       gender,
       birthdate,
     };
-    console.log(user)
 
-    try {
-      const response = await fetch("http://localhost:3005/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
+    const response = await signup(data);
 
-      const result = await response.json();
-      console.log(result); // Log the result from the API
-    } catch (error) {
-      console.log(error); // Log any error
+    if (response.status === 201) {
+      // set User
+      const user = {
+        _id: response.data.user._id,
+        email: response.data.user.email,
+        auth: response.data.auth,
+      };
+      dispatch(setUser(user));
+      // 2. redirect -> homepage
+      navigate("/");
+    } else if (response.code === "ERR_BAD_REQUEST") {
+      // display error message
+      setError(response.response.data.message);
     }
   };
+  const { values, touched, handleBlur, errors } = useFormik({
+    initialValues: {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      zip: "",
+      gender: "",
+      birthdate: "",
+    }
+  });
+  // const handleRegister = async (e) => {
+  //   e.preventDefault(); // Prevent the default form submission
+
+  //   const user = {
+  //     firstname,
+  //     lastname,
+  //     email,
+  //     password,
+  //     zip,
+  //     gender,
+  //     birthdate,
+  //   };
+  //   console.log(user)
+
+  //   try {
+  //     const response = await fetch("http://localhost:3005/api/users", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(user),
+  //     });
+
+  //     const result = await response.json();
+  //     console.log(result); // Log the result from the API
+  //     if(result.isAdmin == true){
+  //       window.location.href = "/admin"
+  //     }
+  //     else{
+  //       localStorage.setItem("authToken",JSON.stringify(result.token))
+  //       window.location.href = "/"
+  //     }
+  //   } catch (error) {
+  //     console.log(error); // Log any error
+  //   }
+  // };
 
   return (
     <div className="reg-container">
@@ -61,7 +116,7 @@ const Register = () => {
           card or pay stub.
         </p>
         <span className="reg-required">* Required</span>
-        <form onSubmit={handleRegister} className="reg-form">
+        <form onSubmit={handleSignup} className="reg-form">
           <label className="reg-labels" htmlFor="firstName">
             First Name*
           </label>
@@ -73,6 +128,10 @@ const Register = () => {
             onChange={(e) => setFirstname(e.target.value)}
             name="firstName"
             required
+            error={errors.firstname && touched.firstname ? 1 : undefined}
+            errormessage={errors.firstname}
+            onBlur={handleBlur}
+
           />
           <label className="reg-labels" htmlFor="lastName">
             Last Name*
@@ -85,6 +144,9 @@ const Register = () => {
             onChange={(e) => setLastname(e.target.value)}
             name="lastName"
             required
+            error={errors.lastname && touched.lastname ? 1 : undefined}
+            errormessage={errors.lastname}
+            onBlur={handleBlur}
           />
           <label className="reg-labels" htmlFor="email">
             Email*
@@ -97,6 +159,9 @@ const Register = () => {
             onChange={(e) => setEmail(e.target.value)}
             name="email"
             required
+            error={errors.email && touched.email ? 1 : undefined}
+            errormessage={errors.email}
+            onBlur={handleBlur}
           />
           <label className="reg-labels" htmlFor="password">
             Password*
@@ -109,6 +174,9 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
             name="password"
             required
+            error={errors.password && touched.password ? 1 : undefined}
+            errormessage={errors.password}
+            onBlur={handleBlur}
           />
           <label className="reg-labels" htmlFor="zipcode">
             ZIP code*
@@ -121,6 +189,9 @@ const Register = () => {
             onChange={(e) => setZip(e.target.value)}
             name="zipcode"
             required
+            error={errors.zip && touched.zip ? 1 : undefined}
+            errormessage={errors.zip}
+            onBlur={handleBlur}
           />
           <label className="reg-labels" htmlFor="gender">
             Gender*
@@ -132,6 +203,9 @@ const Register = () => {
             value={gender}
             onChange={(e) => setGender(e.target.value)}
             required
+            error={errors.gender && touched.gender ? 1 : undefined}
+            errormessage={errors.gender}
+            onBlur={handleBlur}
           >
             <option value="">Select Gender</option>
             <option value="male">Male</option>
@@ -149,6 +223,9 @@ const Register = () => {
             onChange={(e) => setBirthdate(e.target.value)}
             name="dateOfBirth"
             required
+            error={errors.birthdate && touched.birthdate ? 1 : undefined}
+            errormessage={errors.birthdate}
+            onBlur={handleBlur}
           />
           <button type="submit" className="reg-submit">
             Next
@@ -156,6 +233,7 @@ const Register = () => {
           <GoogleWrapper/>
 
         </form>
+        {error != "" ? <p className={'errorMessage'}>{error}</p> : ""}
       </div>
     </div>
   );

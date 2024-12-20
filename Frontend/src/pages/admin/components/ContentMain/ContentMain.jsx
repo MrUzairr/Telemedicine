@@ -8,15 +8,18 @@ import Savings from "../Savings/Savings";
 import Loans from "../Loans/Loans";
 import Financial from "../Financial/Financial";
 import Doctor from "../../menus/addDoctor/index";
+import Account from "../../menus/account/index";
+
 
 const ContentMain = ({ activeTab }) => {
   let content;
-  if (activeTab == "doctors") {     
+  console.log("activeTab",activeTab)
+  if (activeTab === "doctors") {     
       content = <Doctor/>
   }
-  else if (activeTab == "doctors") {     
-    content = <Doctor/>
-  }
+  else if (activeTab === "account") {     
+    content = <Account/>
+}
   else{
     content = (<>
       <div className="content-grid-one">

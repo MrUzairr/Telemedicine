@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { visitDoctor } from "../../../../api";
+import { delDoctor } from "../../../../api";
+import { updatingDoctor } from "../../../../api";
 import {
   Box,
   Button,
@@ -36,7 +38,7 @@ const ViewDoctors = () => {
     const fetchDoctors = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:3005/doc/getalldoctors");
+        const response = await visitDoctor();
         setDoctors(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -49,7 +51,7 @@ const ViewDoctors = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3005/doc/deletedoctor/${id}`);
+      await delDoctor(id);
       setDoctors(doctors.filter((doctor) => doctor._id !== id));
       setSuccessMessage("Doctor details deleted successfully!");
     } catch (err) {
@@ -67,21 +69,19 @@ const ViewDoctors = () => {
     formData.append("fullName", editingDoctor.fullName);
     formData.append("specialty", editingDoctor.specialty);
     formData.append("email", editingDoctor.email);
+    formData.append("password", editingDoctor.passwrod);
     formData.append("phone", editingDoctor.phone);
     formData.append("biography", editingDoctor.biography);
     formData.append("qualifications", editingDoctor.qualifications);
     formData.append("status", editingDoctor.status);
 
     if (selectedFile) {
+      console.log("profilePicture", selectedFile)
       formData.append("profilePicture", selectedFile);
     }
 
     try {
-      const response = await axios.put(`http://localhost:3005/doc/updatedoctor/${editingDoctor._id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await updatingDoctor(editingDoctor._id)
       setDoctors(doctors.map((doc) => (doc._id === editingDoctor._id ? response.data : doc)));
       setSuccessMessage("Doctor details updated successfully!");
       setEditingDoctor(null);
@@ -140,6 +140,7 @@ const ViewDoctors = () => {
                 <TableCell><b>Full Name</b></TableCell>
                 <TableCell><b>Specialty</b></TableCell>
                 <TableCell><b>Email</b></TableCell>
+                <TableCell><b>Password</b></TableCell>
                 <TableCell><b>Phone</b></TableCell>
                 <TableCell><b>Profile Picture</b></TableCell>
                 <TableCell><b>Biography</b></TableCell>
@@ -155,15 +156,17 @@ const ViewDoctors = () => {
                     <TableCell>{doctor.fullName}</TableCell>
                     <TableCell>{doctor.specialty}</TableCell>
                     <TableCell>{doctor.email}</TableCell>
+                    <TableCell>{doctor.passwrod}</TableCell>
                     <TableCell>{doctor.phone}</TableCell>
                     <TableCell>
                       {doctor.profilePicture && (
                         <img
-                          src={`http://localhost:3005/images/${doctor.profilePicture}`}
+                        src={`${process.env.REACT_APP_INTERNAL_API_PATH}/images/${doctor.profilePicture}`}
                           alt={doctor.fullName}
                           style={{
                             width: "50px",
                             height: "50px",
+                            objectPosition: "top center",
                             objectFit: "cover",
                             borderRadius: "50%",
                             cursor: "pointer",
@@ -256,6 +259,16 @@ const ViewDoctors = () => {
               label="Email"
               name="email"
               value={editingDoctor.email}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              required
+            />
+            <TextField
+              label="Password"
+              name="password"
+              value={editingDoctor.passwrod}
               onChange={handleInputChange}
               fullWidth
               margin="normal"

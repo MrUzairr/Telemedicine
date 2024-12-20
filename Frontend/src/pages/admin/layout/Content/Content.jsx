@@ -6,7 +6,7 @@ const Content = ({ activeTab }) => {
 
   return (
     <div className='main-content'>
-      <ContentTop />
+      <ContentTop  activeTab={activeTab}/>
       <ContentMain activeTab={activeTab} /> {/* Pass the active tab */}
     </div>
   )

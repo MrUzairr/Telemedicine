@@ -1,76 +1,117 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import Navbar from "../../components/navbar";
 import Slider from "../../components/slider";
 import ReactStars from "react-rating-stars-component";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Protected from "../../components/Protected/Protected"
+import {
+  Box,
+  Typography,
+  Snackbar,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import { useSelector } from "react-redux";
+
 
 const Home = () => {
-  const ratingChanged = (newRating) => {
-    console.log(newRating);
+  const navigate = useNavigate(); 
+  const isAuth = useSelector((state) => state.user.auth);
+  console.log("isAuth",isAuth)
+  const [doctors, setDoctors] = useState([]); // State to hold fetched doctors
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  // Handle click event on "Get care now" button
+  const handleGetCareNowClick = (doctor) => {
+    navigate("/doctorinfo", { state: { doctor } }); // Passing doctor data to the doctorinfo page
   };
+
+  // Static data (for fallback if API data is unavailable)
+  const staticCardData = [
+    { id: 1, title: "Dr. Asim", description: "Anytime, anywhere, anything care", image: "/images/doctor1.jpg", link: "#" },
+    { id: 2, title: "Dr. Bilal", description: "Find clinics near you", image: "/images/doctor2.jpg", link: "#" },
+    { id: 3, title: "Dr. Tahira", description: "Get emergency help", image: "/images/doctor3.jpg", link: "#" },
+    { id: 3, title: "Dr. Ahmed Khan", description: "Available 24/7 for consultations.", image: "/images/doctor5.jpg", link: "#" },
+  ];
+
+  // Fetch doctors from the API
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get("http://localhost:3005/doc/getalldoctors");
+        setDoctors(response.data.data);
+      } catch (err) {
+        setError(err.response?.data?.error || "Failed to fetch doctor details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
   return (
     <div>
-      {/* navbar */}
+      {/* Navbar */}
       <div className="home-front">
-        <div>
-          <Navbar />
-        </div>
+        <Navbar />
       </div>
-      {/* Front view */}
 
+      {/* Front view */}
       <div className="home-body">
         <h2 className="home-body-top-content">
-          {" "}
-          <h2 className="home-body-top-content">
-            For your physical health. For your{" "}
-            <a href="#" style={{ color: "#17AF2D" }}>
-              mental health
-            </a>
-            . For{" "}
-            <a href="#" style={{ color: "#008CAF" }}>
-              clinicians
-            </a>
-            . For{" "}
-            <a href="#" style={{ color: "#6240E8" }}>
-              hospitals
-            </a>
-            . For all of it in one place. For life.
-          </h2>
+          For your physical health. For your{" "}
+          <a href="#" style={{ color: "#17AF2D" }}>
+            mental health
+          </a>
+          . For{" "}
+          <a href="#" style={{ color: "#008CAF" }}>
+            clinicians
+          </a>
+          . For{" "}
+          <a href="#" style={{ color: "#6240E8" }}>
+            hospitals
+          </a>
+          . For all of it in one place. For life.
         </h2>
       </div>
-      {/* Card Section */}
 
+           {/* Card Section */}
       <div className="home-body-card-part">
-        <div className="home-body-cards">
-          <div className="home-body-cards-content">
-            <h4>Doctors</h4>
-            <p>Anytime, anywhere, anything care</p>
-            <a href=""> Get care now</a>
-          </div>
-          <div className="home-body-cards-image">
-            <img src={"doctor-card-pic.jpg"} alt="doctor-card-pic.jpg" />
-          </div>
-        </div>
-        <div className="home-body-cards">
-          <div className="home-body-cards-content">
-            <h4>Doctors</h4>
-            <p>Anytime, anywhere, anything care</p>
-            <a href=""> Get care now</a>
-          </div>
-          <div className="home-body-cards-image">
-            <img src={"doctor-card-pic.jpg"} alt="doctor-card-pic.jpg" />
-          </div>
-        </div>
-        <div className="home-body-cards">
-          <div className="home-body-cards-content">
-            <h4>Doctors</h4>
-            <p>Anytime, anywhere, anything care</p>
-            <a href=""> Get care now</a>
-          </div>
-          <div className="home-body-cards-image">
-            <img src={"doctor-card-pic.jpg"} alt="doctor-card-pic.jpg" />
-          </div>
-        </div>
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Snackbar open={true} autoHideDuration={4000} onClose={() => setError(null)}>
+            <Alert severity="error">{error}</Alert>
+          </Snackbar>
+        ) : (
+          // Check if doctors were fetched, else use the static fallback data
+          (doctors.length > 0 ? doctors : staticCardData).map((card) => (
+            <div key={card._id || card.id} className="home-body-cards">
+              <div className="home-body-cards-content">
+                <h4>{(card.fullName)?.length > 20
+    ? `${(card.fullName).slice(0, 20)}...`
+    : card.fullName}</h4>
+                <p>{(card.qualifications || card.description)?.length > 28
+    ? `${(card.qualifications || card.description).slice(0, 28)}...`
+    : card.qualifications || card.description}</p>
+                <Protected isAuth={isAuth}>
+                <a href={card.link || "/doctorinfo"} style={{color:"#6240E8",}} onClick={() => handleGetCareNowClick(card)}>Get care now</a>
+                </Protected>
+
+              </div>
+              <div className="home-body-cards-image">
+                <img
+                  src={`http://localhost:3005/images/${card.profilePicture || card.image}`}
+                  alt={card.fullName || card.title}
+                />
+              </div>
+            </div>
+          ))
+        )}
       </div>
       {/* About Section */}
 

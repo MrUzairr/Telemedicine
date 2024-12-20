@@ -1,5 +1,6 @@
 const express = require('express');
 const {validateToken,requireRoles } = require('../utils/authorization_middleware');
+const auth = require('../middleware/index');
 
 
 const router = express.Router();
@@ -8,7 +9,10 @@ const userController = require('../controller/userController');
 const loginController = require('../controller/loginController');
 
 router.post('/login',loginController.loginUser);
-router.get('/google',loginController.googleAuth);
+router.post('/logout',auth,loginController.logout);
+router.post('/refresh',loginController.refresh);
+router.get('/google-login',loginController.googleAuthLogin);
+router.get('/google-register',userController.googleAuthRegister);
 router.post('/users',userController.addUser);
 router.get('/getallusers',userController.getAllUser);
 router.put('/updateuser/:id',userController.updateUser);

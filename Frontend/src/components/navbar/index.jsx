@@ -5,14 +5,39 @@ import { IoSearch } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBars,faTimes  } from '@fortawesome/free-solid-svg-icons'
+import { CgLogOut } from "react-icons/cg";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { signout } from "../../api";
+import { resetUser } from "../../store/userSlice";
+
 
 const Navbar = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [showCross, setShowCross] = useState(false);
-    const handleRegister = () => {
-         window.location.href = '/signup'
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
+
+    const dispatch = useDispatch();
+    const handleSignout = async() => {
+      await signout();
+      dispatch(resetUser());
     }
+
+    const isAuthenticated = useSelector(state => state.user.auth);
+  const handleRegister = () => {
+    window.location.href = "/signup";
+  };
+  const handleSymptoms = () => {
+    window.location.href = "/symptoms";
+  };
+
+  const handleSignIn = () => {
+    window.location.href = "/signin";
+  };
+
     useEffect(() => {
+
+    // Cleanup interval when component unmounts
       if (dropdownVisible) {
         // Delay showing the cross icon by 1 second (1000ms)
         const timer = setTimeout(() => {
@@ -22,6 +47,7 @@ const Navbar = () => {
       } else {
         setShowCross(false); // Hide the cross icon when dropdown is closed
       }
+
     }, [dropdownVisible]);
     const handleNav = () => {
       if (window.innerWidth <= 768) { // Check for mobile view
@@ -197,19 +223,44 @@ const Navbar = () => {
              
             </div>
 
-            <div className="nav-logo-div">
+            <div className={`nav-logo-div ${isAuthenticated ? 'authenticated' : 'unauthenticated'}`}>
               <h4 className="nav-logo">Telemedicine</h4>
             </div>
             <div className="nav-functions">
-              <a className="nav-sign nav-sign1" style={{color:"#000",textDecoration:"none"}} href="/signin">
-                <span className="nav-signin-logo">
-                  <PiSignInBold />
-                </span>{" "}
-                Sign in
-              </a>
-              <div className="nav-sign">
-                <button className="nav-register" onClick={handleRegister}>Register now</button>
-              </div>
+              {isAuthenticated ? (
+                // Render Logout button when logged in
+                 <div className="nav-sign nav-sign3">
+                 <button className="nav-logout" onClick={handleSignout}>
+                    <CgLogOut className="logout-icon nav-signin-logo" />
+                    <span className="logout-text">Logout</span>
+                  </button>
+                  <button className="nav-logout" onClick={handleSymptoms}>
+                    <img src="/images/generative.png" className="logout-icon nav-signin-logo ai-icon" />
+                    <span className="logout-text">Search with AI</span>
+                  </button>
+
+               </div>
+              ) : (
+               
+                // Render Sign in and Register buttons when not logged in
+                <>
+                  <a
+                    className="nav-sign nav-sign1"
+                    style={{ color: "#000", textDecoration: "none" }}
+                    onClick={handleSignIn}
+                  >
+                    <span className="nav-signin-logo">
+                      <PiSignInBold />
+                    </span>{" "}
+                    Sign in
+                  </a>
+                  <div className="nav-sign">
+                    <button className="nav-register" onClick={handleRegister}>
+                      Register now
+                    </button>
+                  </div>
+                </>
+              )}
               <div className="nav-sign nav-sign2">
                 <button
                   className="btn nav-search"

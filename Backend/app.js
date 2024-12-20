@@ -7,6 +7,8 @@ const bodyParser = require("body-parser");
 const usersRoute = require("./routes/userRoutes");
 const templateRoute = require('./routes/templateRoutes')
 const doctorRoute = require('./routes/doctorRoutes')
+const authRoute = require('./routes/authRoutes')
+const errorHandler = require('./middleware/errorHandler')
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -20,7 +22,12 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(cors());
+const corsOptions = {
+  credentials: true,
+  origin: ['http://localhost:3000','http://localhost:3001']
+}
+app.use(cors(corsOptions));
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -29,7 +36,8 @@ app.use(cookieParser());
 // Serve static files from the "public" directory
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
-
+// Use the auth routes (refresh and logout)
+// app.use("/api/auth", authRoute);
 app.use("/api", usersRoute);
 app.use("/doc", doctorRoute);
 // app.get("/doc/getalldoctors", (req, res) => {
@@ -100,6 +108,7 @@ app.use(function(err, req, res, next) {
 //   }
 // });
 
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is Listening on PORT: ${PORT}`);

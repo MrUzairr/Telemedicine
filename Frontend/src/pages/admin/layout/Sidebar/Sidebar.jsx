@@ -4,12 +4,13 @@ import { navigationLinks } from '../../data/data';
 import "./Sidebar.css";
 import { useContext } from 'react';
 import { SidebarContext } from '../../context/sidebarContext';
+import UserInfo from '../../components/UserInfo';
 
 const Sidebar = ({ setActiveTab }) => {
   const [activeLinkIdx, setActiveLinkIdx] = useState(0); // Use 0-based index for easier comparison
   const [sidebarClass, setSidebarClass] = useState("");
   const { isSidebarOpen } = useContext(SidebarContext);
-
+  const admin = JSON.parse(localStorage.getItem("adminAuth"));
   useEffect(() => {
     setSidebarClass(isSidebarOpen ? 'sidebar-change' : '');
   }, [isSidebarOpen]);
@@ -18,14 +19,20 @@ const Sidebar = ({ setActiveTab }) => {
     setActiveTab(tabName); // Update the active tab in the parent
     setActiveLinkIdx(index); // Correctly update the active link index
   };
-
   return (
     <div className={`sidebar ${sidebarClass}`}>
-      <div className="user-info">
+      {/* <div className="user-info">
         <div className="info-img img-fit-cover">
-          <img src={personsImgs.person_two} alt="profile" />
+          <img src={personsImgs.person_two} onClick={handleImage} style={{cursor:"pointer"}} alt="profile" />
         </div>
-        <span className="info-name">alice-doe</span>
+        <div style={{display:'flex',flexDirection:'column',fontSize:'16px',textAlign:'left'}}>
+        <span className="info-name" style={{fontSize:'14px'}}>alice-doe</span>
+        <p style={{fontSize:'12px'}}>publicmail760@gmail.com</p>
+        </div>
+
+      </div> */}
+      <div style={{fontSize:'16px'}}>
+      <UserInfo admin={admin}/>
       </div>
 
       <nav className="navigation">

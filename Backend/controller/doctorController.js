@@ -17,8 +17,7 @@ var upload = multer({ storage: storage });
 
 const createDoctor = async (req, res) => {
     try {
-      const { fullName, specialty, email, phone, biography, qualifications, status } = req.body;
-      
+      const { fullName, specialty, email, password, phone, biography, qualifications, status } = req.body;
       // Check if the image was uploaded successfully
       if (!req.file) {
         return res.status(400).json({
@@ -31,14 +30,17 @@ const createDoctor = async (req, res) => {
         fullName,
         specialty,
         email,
+        password,
         phone,
         profilePicture:  path.basename(req.file.path), // Store the relative path to the image
         biography,
         qualifications,
         status,
+        isDoctor:true
       });
-  
+
       const savedDoctor = await newDoctor.save();
+
       res.status(201).json({
         message: 'Doctor created successfully!',
         data: savedDoctor,
@@ -120,33 +122,79 @@ const getDoctorById = async (req, res) => {
 
 // Update a doctor by ID
 const updateDoctor = async (req, res) => {
+  const doctorId = req.params.id;
+  const { fullName, specialty, email, phone, biography, qualifications, status } = req.body;
+
   try {
-    const { id } = req.params;
-    const { fullName, specialty, email, phone, profilePicture, biography, qualifications, status } = req.body;
-
-    const updatedDoctor = await Doctor.findByIdAndUpdate(
-      id,
-      { fullName, specialty, email, phone, profilePicture, biography, qualifications, status },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedDoctor) {
-      return res.status(404).json({
-        message: 'Doctor not found',
-      });
+    // Find the doctor by ID
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ error: "Doctor not found" });
     }
 
-    res.status(200).json({
-      message: 'Doctor updated successfully!',
-      data: updatedDoctor,
-    });
-  } catch (error) {
-    res.status(400).json({
-      message: 'Error updating doctor',
-      error: error.message,
-    });
+    // If a new file is uploaded, update the profile picture
+    let newProfilePicture = doctor.profilePicture;  // Default to current profile picture if no new file is uploaded
+
+    if (req.file) {
+      // If a new file is uploaded, update the profile picture
+      newProfilePicture = req.file.filename;  // Get the new file name
+    }
+
+    // Prepare updated doctor object
+    const updatedDoctorData = {
+      fullName: fullName || doctor.fullName,  // Use the current value if not provided
+      specialty: specialty || doctor.specialty,
+      email: email || doctor.email,
+      phone: phone || doctor.phone,
+      biography: biography || doctor.biography,
+      qualifications: qualifications || doctor.qualifications,
+      status: status !== undefined ? status : doctor.status,  // Keep current status if not provided
+      profilePicture: newProfilePicture,
+    };
+
+    // Update the doctor details
+    const updatedDoctor = await Doctor.findByIdAndUpdate(doctorId, updatedDoctorData, { new: true });
+
+    // Respond with the updated doctor data
+    return res.status(200).json(updatedDoctor);
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to update doctor." });
   }
 };
+
+
+
+// const updateDoctor = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { fullName, specialty, email, phone, profilePicture, biography, qualifications, status } = req.body;
+
+//     const updatedDoctor = await Doctor.findByIdAndUpdate(
+//       id,
+//       { fullName, specialty, email, phone, profilePicture, biography, qualifications, status },
+//       { new: true, runValidators: true }
+//     );
+//     console.log("Updated Doctor",updatedDoctor)
+
+//     if (!updatedDoctor) {
+//       return res.status(404).json({
+//         message: 'Doctor not found',
+//       });
+//     }
+
+//     res.status(200).json({
+//       message: 'Doctor updated successfully!',
+//       data: updatedDoctor,
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       message: 'Error updating doctor',
+//       error: error.message,
+//     });
+//   }
+// };
 
 // Delete a doctor by ID
 const deleteDoctor = async (req, res) => {

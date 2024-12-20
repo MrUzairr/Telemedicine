@@ -34,14 +34,16 @@
 }
 .home-body-cards {
   width: 300px;
-  height: 450px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   text-align: left;
   border-radius: 20px !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Horizontal offset, vertical offset, blur radius, color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); Horizontal offset, vertical offset, blur radius, color */
   transition: box-shadow 0.3s ease; 
 }
 
@@ -73,13 +75,20 @@
   overflow: hidden;
 
 }
-.home-body-cards > .home-body-cards-image img {
-  width: 100%; /* Make the image take up the full width of the container */
-  height: 100%; /* Set a fixed height */
-  object-fit: cover; /* This will ensure the image covers the container without distorting */
-  border-radius: 0 0 20px 20px; /* Apply rounded corners to the top part */
-
+.home-body-cards > .home-body-cards-image {
+  position: relative;
+  width: 100%; /* Full width of the container */
+  height: 100%; /* Ensure the container has a set height */
 }
+
+.home-body-cards > .home-body-cards-image img {
+  width: 100%; /* Image takes full width of the container */
+  height: 100%; /* Image takes full height of the container */
+  object-fit: cover; /* Cover the container without stretching the image */
+  object-position: top center;
+  border-radius: 0 0 20px 20px; /* Apply rounded corners to the bottom part */
+}
+
 
 .home-body-about {
   margin-top: 100px;

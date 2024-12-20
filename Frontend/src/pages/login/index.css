@@ -118,3 +118,13 @@
     text-decoration:none;
 
 }
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .error {
+    border-color: red;
+  }
+  
